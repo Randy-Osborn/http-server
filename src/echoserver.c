@@ -7,11 +7,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-struct sockaddr_in {
-    sa_family_t    sin_family;  // AF_INET
-    in_port_t      sin_port;    // htons(PORT)
-    struct in_addr sin_addr;    // INADDR_ANY
-};
 
 
 #define PORT 8080
@@ -22,11 +17,26 @@ int main() {
     struct sockaddr_in server_addr, client_addr;
     socklen_t client_len;
     char buffer[BUFFER_SIZE];
-    
-    // TODO: Create socket
-    
-    // TODO: Set socket options (SO_REUSEADDR)
-    
+    int opt = 1;
+    // Create socket
+    server_fd = socket( AF_INET,      // Domain: IPv4 internet protocol
+                        SOCK_STREAM,  // Type: TCP (reliable stream)
+                        0);           // Protocol: 0 = "use default for SOCK_STREAM" (TCP)
+    if (server_fd < 0) {
+        perror("Socket creation failed");
+        exit(EXIT_FAILURE);
+    }
+    // Set socket options (SO_REUSEADDR)
+
+    if (setsockopt(server_fd,     // Which socket? 
+           SOL_SOCKET,    // What level?  (socket level, not TCP/IP level)
+           SO_REUSEADDR,  // What option?  (reuse address)
+           &opt,          // Pointer to value (1 = enable, 0 = disable)
+           sizeof(opt)) < 0){  // Size of the value {
+        perror("Set socket options failed");
+        close(server_fd);
+        exit(EXIT_FAILURE);
+    }   
     // TODO: Setup server address structure
     
     // TODO:  Bind socket to port
