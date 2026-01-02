@@ -37,15 +37,63 @@ int main() {
         close(server_fd);
         exit(EXIT_FAILURE);
     }   
-    // TODO: Setup server address structure
-    
-    // TODO:  Bind socket to port
-    
-    // TODO: Listen for connections
-    
+    // Setup server address structure
+   memset(&server_addr, 0, sizeof(server_addr));
+   server_addr.sin_family = AF_INET; // IPv4
+   server_addr.sin_addr.s_addr = INADDR_ANY; // Accept connections from any address
+   server_addr.sin_port = htons(PORT); // Port number in network byte order
+
+       // Bind socket to port
+    if(bind(server_fd,(struct sockaddr *)&server_addr,sizeof(server_addr)) < 0){
+        perror("Bind Failure");
+        close(server_fd);
+        exit(EXIT_FAILURE);
+    }
+
+    // Listen for connections
+    if(listen(server_fd, 5) < 0){
+        perror("listen Failure");
+        close(server_fd);
+        exit(EXIT_FAILURE);
+    }
+ 
     printf("Server listening on port %d...\n", PORT);
     
     // TODO: Main loop - accept, read, write, close
-    
+    while(1){
+        printf("Waiting for a new connection...\n");
+        fflush(stdout);
+        //accept new connection
+        client_len = sizeof(client_addr);
+        client_fd = accept(server_fd, (struct sockaddr *)&client_addr,&client_len);
+        if(client_fd < 0){
+            perror("Accept Failure");
+           continue;
+        }
+        printf("Connection accepted from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+        memset(buffer, 0, BUFFER_SIZE); // Clear buffer
+        ssize_t bytes_read = read(client_fd, buffer, BUFFER_SIZE);
+        if(bytes_read < 0){
+            perror("Read Failure");
+            close(client_fd);
+            continue;
+        }else if(bytes_read == 0){
+            printf("Client disconnected before sending data\n");
+            close(client_fd);
+            continue;
+        }else{
+            printf("Received message: %s\n", buffer);
+            ssize_t bytes_written = write(client_fd, buffer, bytes_read);
+            if(bytes_written < 0){
+                perror("Write Failure");
+            }else if(bytes_written < bytes_read){
+                fprintf(stderr, "Partial write occurred\n");
+            }
+            close(client_fd);
+        }
+
+     
+
+    }
     return 0;
 }

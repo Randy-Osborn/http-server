@@ -12,6 +12,7 @@ Building a fully functional HTTP server in C to understand network programming, 
 ## Learning Objectives
 
 By the end of this project, you will understand:
+
 - TCP/IP socket programming (bind, listen, accept, read/write)
 - HTTP protocol structure (requests, responses, headers, status codes)
 - File I/O and efficient data transfer
@@ -22,9 +23,11 @@ By the end of this project, you will understand:
 ## Development Roadmap
 
 ### Phase 1: Foundation - Echo Server
-**Goal**:  Establish basic socket communication
+
+**Goal**: Establish basic socket communication
 
 **Core Concepts**:
+
 - Socket creation and configuration
 - Binding to a port
 - Listening for connections
@@ -37,9 +40,11 @@ By the end of this project, you will understand:
 ---
 
 ### Phase 2: HTTP Basics - Hello World Server
+
 **Goal**: Speak HTTP
 
 **Core Concepts**:
+
 - HTTP request structure (method, path, version, headers)
 - HTTP response structure (status line, headers, body)
 - Request parsing (extracting method and path)
@@ -52,9 +57,11 @@ By the end of this project, you will understand:
 ---
 
 ### Phase 3: Static File Server
+
 **Goal**: Serve real files from disk
 
-**Core Concepts**: 
+**Core Concepts**:
+
 - File system operations (stat, open, read)
 - Path handling and security (prevent directory traversal)
 - MIME type detection based on file extensions
@@ -66,9 +73,11 @@ By the end of this project, you will understand:
 ---
 
 ### Phase 4: HTTP Status Codes & Error Handling
+
 **Goal**: Handle edge cases gracefully
 
-**Core Concepts**: 
+**Core Concepts**:
+
 - 200 OK - Successful requests
 - 404 Not Found - Missing resources
 - 400 Bad Request - Malformed requests
@@ -81,9 +90,11 @@ By the end of this project, you will understand:
 ---
 
 ### Phase 5: Enhanced HTTP Features
+
 **Goal**: Support more HTTP functionality
 
-**Core Concepts**: 
+**Core Concepts**:
+
 - Request header parsing (Host, User-Agent, Accept, etc.)
 - Response headers (Date, Server, Connection, etc.)
 - Keep-Alive vs Connection: close
@@ -96,9 +107,11 @@ By the end of this project, you will understand:
 ---
 
 ### Phase 6: Concurrency - Forking Model
+
 **Goal**: Handle multiple clients simultaneously
 
-**Core Concepts**: 
+**Core Concepts**:
+
 - Process forking with fork()
 - Parent and child process responsibilities
 - Zombie process prevention
@@ -111,9 +124,11 @@ By the end of this project, you will understand:
 ---
 
 ### Phase 7: Concurrency - Threading Model
+
 **Goal**: Alternative concurrency approach
 
-**Core Concepts**: 
+**Core Concepts**:
+
 - POSIX threads (pthread)
 - Thread creation and joining
 - Thread-per-connection model
@@ -127,9 +142,11 @@ By the end of this project, you will understand:
 ---
 
 ### Phase 8: Concurrency - Event-Driven I/O
+
 **Goal**: Maximum scalability with non-blocking I/O
 
 **Core Concepts**:
+
 - Non-blocking sockets
 - I/O multiplexing with poll() or select()
 - Edge-triggered vs level-triggered events
@@ -143,9 +160,11 @@ By the end of this project, you will understand:
 ---
 
 ### Phase 9: POST Method & Form Handling
+
 **Goal**: Accept data from clients
 
 **Core Concepts**:
+
 - Reading request body
 - Content-Length driven reads
 - application/x-www-form-urlencoded parsing
@@ -158,9 +177,11 @@ By the end of this project, you will understand:
 ---
 
 ### Phase 10: Advanced Features (Optional Extensions)
+
 **Goal**: Polish and production-readiness
 
 **Possible Features**:
+
 - Configuration file support
 - Request/access logging
 - Virtual hosts
@@ -187,34 +208,22 @@ http-server/
 ├── README.md                 # This file
 ├── Makefile                  # Build automation
 ├── src/
-│   ├── 01_echo/             # Phase 1: Echo server
-│   ├── 02_http_basic/       # Phase 2: Basic HTTP
-│   ├── 03_static_files/     # Phase 3: File serving
-│   ├── 04_error_handling/   # Phase 4: Status codes
-│   ├── 05_http_enhanced/    # Phase 5: More HTTP
-│   ├── 06_forking/          # Phase 6: Multi-process
-│   ├── 07_threading/        # Phase 7: Multi-threaded
-│   ├── 08_event_driven/     # Phase 8: epoll
-│   ├── 09_post_forms/       # Phase 9: POST handling
-│   └── 10_advanced/         # Phase 10: Extensions
-├── public/                   # Static files to serve
-│   ├── index.html
-│   ├── css/
-│   ├── js/
-│   └── images/
-├── tests/                    # Test scripts
+│   └── echoserver.c         # Phase 1: Echo server (COMPLETE)
+├── build/                    # Compiled binaries
 └── docs/                     # Additional documentation
 ```
 
 ## Resources
 
 ### Essential Reading
+
 - Beej's Guide to Network Programming
 - "The Linux Programming Interface" by Michael Kerrisk
 - RFC 2616 (HTTP/1.1) - at least sections 4, 5, 6, 9, 10
 - "Unix Network Programming" by W. Richard Stevens
 
 ### Helpful Tools
+
 - `curl` - Test HTTP requests
 - `telnet` / `nc` (netcat) - Raw socket testing
 - `strace` - Debug system calls
@@ -223,20 +232,22 @@ http-server/
 - `wireshark` - Packet inspection
 
 ### Reference Implementations
+
 - zerohttpd - Teaching-focused examples
 - nginx source code - Production server architecture
 - thttpd - Minimalist approach
 
-##  Testing Strategy
+## Testing Strategy
 
-- **Unit**:  Test individual components (parsing, header generation)
+- **Unit**: Test individual components (parsing, header generation)
 - **Integration**: Test full request/response cycles
-- **Load**:  Test with many concurrent connections
+- **Load**: Test with many concurrent connections
 - **Security**: Test for directory traversal, buffer overflows
 - **Compliance**: Test against HTTP spec requirements
 
-##  Success Metrics
+## Success Metrics
 
+- [x] **Phase 1 Complete**: Echo server working with proper socket programming
 - [ ] Can serve a static website with HTML, CSS, JS, images
 - [ ] Handles 100+ concurrent connections
 - [ ] Properly implements HTTP/1.1 core features
@@ -245,20 +256,53 @@ http-server/
 - [ ] Can view in a real web browser
 - [ ] Passes basic HTTP compliance tests
 
-##  Getting Started
+## Getting Started
 
-1. Start with Phase 1 - get the echo server working
-2. Test thoroughly before moving to the next phase
-3. Keep each phase in a separate directory for comparison
-4. Document your learnings and challenges
-5. Experiment and break things - that's how you learn!
+```bash
+# Build the echo server
+make
 
-##  Development Log
+# Run the server
+./build/echoserver
 
-Track your progress, challenges encountered, and lessons learned as you work through each phase.
+# Test in another terminal
+echo "Hello, World!" | nc localhost 8080
+```
+
+## Development Log
+
+### Phase 1: Echo Server - ✅ COMPLETE (Jan 1, 2026)
+
+**What was built:**
+
+- Complete TCP echo server in C
+- Socket creation with proper error handling
+- SO_REUSEADDR option for quick restarts
+- Bind, listen, and accept loop
+- Read from client and echo back data
+- Robust error handling throughout
+- Clean resource management
+
+**Key learnings:**
+
+- Socket programming fundamentals (socket, bind, listen, accept)
+- Network byte order conversion (htons, ntohs)
+- Proper error handling for network operations
+- Difference between server socket and client socket
+- Understanding file descriptors in Unix
+- Buffer management and read/write operations
+
+**Testing:**
+
+- ✅ Tested with netcat (nc)
+- ✅ Tested with telnet
+- ✅ Tested with web browser (received HTTP request)
+- ✅ Proper connection accept/close cycle
+
+**Next Steps:** Phase 2 - Basic HTTP Server
 
 ---
 
-**Current Phase**: Phase 1 - Echo Server  
-**Status**: In Progress  
-**Next Milestone**: Accept and echo back TCP connections
+**Current Phase**: Phase 2 - HTTP Basics  
+**Status**: Not Started  
+**Next Milestone**: Parse HTTP requests and send proper HTTP responses
