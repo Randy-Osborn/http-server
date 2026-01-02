@@ -59,7 +59,7 @@ int main() {
  
     printf("Server listening on port %d...\n", PORT);
     
-    // TODO: Main loop - accept, read, write, close
+    // Main loop - accept, read, write, close
     while(1){
         printf("Waiting for a new connection...\n");
         fflush(stdout);
