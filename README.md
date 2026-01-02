@@ -205,12 +205,14 @@ By the end of this project, you will understand:
 
 ```
 http-server/
-├── README.md                 # This file
-├── Makefile                  # Build automation
+├── README.md                      # This file
+├── Makefile                       # Build automation
 ├── src/
-│   └── echoserver.c         # Phase 1: Echo server (COMPLETE)
-├── build/                    # Compiled binaries
-└── docs/                     # Additional documentation
+│   ├── phase1_echoserver.c       # Phase 1: Echo server (COMPLETE)
+│   ├── phase2_httpserver.c       # Phase 2: HTTP basics (COMPLETE)
+│   └── phase3_staticserver.c     # Phase 3: Static files (TODO)
+├── build/                         # Compiled binaries
+└── docs/                          # Additional documentation
 ```
 
 ## Resources
@@ -248,25 +250,38 @@ http-server/
 ## Success Metrics
 
 - [x] **Phase 1 Complete**: Echo server working with proper socket programming
+- [x] **Phase 2 Complete**: HTTP server with hardcoded HTML response
+- [x] Can view in a real web browser
 - [ ] Can serve a static website with HTML, CSS, JS, images
 - [ ] Handles 100+ concurrent connections
 - [ ] Properly implements HTTP/1.1 core features
 - [ ] No memory leaks (valgrind clean)
 - [ ] Graceful error handling
-- [ ] Can view in a real web browser
 - [ ] Passes basic HTTP compliance tests
 
 ## Getting Started
 
 ```bash
-# Build the echo server
+# Build all phases
 make
 
-# Run the server
-./build/echoserver
+# Build a specific phase
+make phase1
+make phase2
 
-# Test in another terminal
+# Run the latest phase (currently Phase 2)
+make run
+
+# Run a specific phase
+make run-phase1    # Echo server
+make run-phase2    # HTTP server
+
+# Test Phase 1 (Echo Server)
 echo "Hello, World!" | nc localhost 8080
+
+# Test Phase 2 (HTTP Server)
+curl http://localhost:8080
+# OR open http://localhost:8080 in your browser
 ```
 
 ## Development Log
@@ -303,6 +318,38 @@ echo "Hello, World!" | nc localhost 8080
 
 ---
 
-**Current Phase**: Phase 2 - HTTP Basics  
+### Phase 2: HTTP Basics - ✅ COMPLETE (Jan 2, 2026)
+
+**What was built:**
+
+- HTTP request parser (extracts method, path, version using sscanf)
+- Proper HTTP/1.1 response formatting
+- Status line: `HTTP/1.1 200 OK`
+- HTTP headers: Content-Type, Content-Length, Connection
+- Hardcoded HTML response served to clients
+- Browser-compatible output
+
+**Key learnings:**
+
+- HTTP request structure (request line: METHOD PATH VERSION)
+- HTTP response structure (status line + headers + blank line + body)
+- Header format: `Header-Name: value\r\n`
+- Importance of Content-Length for body size
+- `\r\n\r\n` separator between headers and body
+- Using snprintf to build formatted strings
+- Type casting for signed/unsigned comparisons
+
+**Testing:**
+
+- ✅ Tested with web browser (Chrome/Firefox/etc.)
+- ✅ Tested with curl
+- ✅ Proper HTML rendering
+- ✅ Correct HTTP headers sent
+
+**Next Steps:** Phase 3 - Static File Server
+
+---
+
+**Current Phase**: Phase 3 - Static File Server  
 **Status**: Not Started  
-**Next Milestone**: Parse HTTP requests and send proper HTTP responses
+**Next Milestone**: Serve actual files from disk instead of hardcoded HTML
