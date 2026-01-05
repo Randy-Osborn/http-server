@@ -60,7 +60,7 @@ int main() {
  
     printf("Server listening on port %d...\n", PORT);
     
-    // Main loop - accept, read, write, close
+    // Main loop - accept requests and serve files
     while(1){
         printf("Waiting for a new connection...\n");
         fflush(stdout);
@@ -92,6 +92,12 @@ int main() {
             // build file path            
             char file_path[512];
             snprintf(file_path, sizeof(file_path), "./public%s", path);
+            
+            // If path ends with '/' or is just '/', append 'index.html'
+            if (path[strlen(path) - 1] == '/') {
+                strncat(file_path, "index.html", sizeof(file_path) - strlen(file_path) - 1);
+            }
+            
             printf("looking for file: %s\n", file_path);
             
             //check file existence
@@ -103,40 +109,101 @@ int main() {
                 "Content-Length: 0\r\n"
                 "Connection: close\r\n"
                 "\r\n";
+                write(client_fd, not_found_response, strlen(not_found_response));
                 close(client_fd);
                 continue;
             }
             printf("File found, size: %ld bytes\n", file_stat.st_size);
+            //Step 3 - Read file contents
+            int file_fd = open(file_path, O_RDONLY); //read only
+            // - Error check each step
+            if(file_fd < 0){
+                perror("File open failure");
+                close(client_fd);
+                continue;
+            }
+            printf("File opened successfully\n");
 
-            // TODO: Step 3 - Read file contents
-            // - Open file with open(file_path, O_RDONLY)
-            // - Allocate buffer with malloc(file_stat.st_size)
-            // - Read file contents with read()
-            // - Close file with close()
-            
-            // TODO: Step 4 - Detect MIME type
-            // - Check file extension (.html, .css, .js, .png, .jpg)
-            // - Set appropriate Content-Type string
-            //   .html -> "text/html"
-            //   .css  -> "text/css"
-            //   .js   -> "application/javascript"
-            
-            // TODO: Step 5 - Build HTTP response
-            // - Create response with status line, headers, and file contents
-            // - Use snprintf to format headers
-            // - Use detected Content-Type from step 4
-            // - Use file_stat.st_size for Content-Length
-            
-            // TODO: Step 6 - Send response
-            // - write() the complete response to client_fd
-            // - Error check for partial writes
-            // - free() the file_buffer
-            
+            char *file_buffer = malloc(file_stat.st_size);
+            if(!file_buffer){
+                perror("Memory allocation failure");
+                close(file_fd);
+                close(client_fd);
+                continue;
+            }
+            ssize_t total_bytes_read = read(file_fd, file_buffer, file_stat.st_size);
+            close(file_fd);
+            if(total_bytes_read < 0 || total_bytes_read < (ssize_t)file_stat.st_size){
+                perror("File read failure");
+                free(file_buffer);
+                close(client_fd);
+                continue;
+            }
+            printf("File read successfully\n");
 
+
+            //Step 4 - Detect MIME type
+            
+            const char *content_type = "application/octet-stream";  // Default for unknown types
+            // find the file extension
+            const char *ext = strrchr(file_path, '.');
+            if(ext){
+                if(strcmp(ext, ".html") == 0){
+                    content_type = "text/html";
+                }else if(strcmp(ext, ".css") == 0){
+                    content_type = "text/css";
+                }else if(strcmp(ext, ".js") == 0){
+                    content_type = "application/javascript";
+                }else if(strcmp(ext, ".png") == 0){
+                    content_type = "image/png";
+                }else if(strcmp(ext, ".jpg") == 0 || strcmp(ext, ".jpeg") == 0){
+                    content_type = "image/jpeg";
+                }else if(strcmp(ext, ".gif") == 0){
+                    content_type = "image/gif";
+                }   else if(strcmp(ext, ".txt") == 0){
+                    content_type = "text/plain";
+                }
+            }
+            printf("Detected Content-Type: %s\n", content_type);
+
+
+            //Step 5 - Build HTTP response
+            char header_buffer[BUFFER_SIZE];
+            int header_length = snprintf(header_buffer, sizeof(header_buffer),
+                "HTTP/1.1 200 OK\r\n"
+                "Content-Type: %s\r\n"
+                "Content-Length: %ld\r\n"
+                "Connection: close\r\n"
+                "\r\n", content_type, file_stat.st_size);
+            if(header_length < 0 || header_length >= BUFFER_SIZE){
+                perror("Header formatting failure");
+                free(file_buffer);
+                close(client_fd);
+                continue;
+            }
+
+            //Step 6 - Send response
+            //send headers
+            ssize_t header_bytes_written = write(client_fd, header_buffer, header_length);
+            if(header_bytes_written < 0 || header_bytes_written < header_length){
+                perror("Header write failure");
+                free(file_buffer);
+                close(client_fd);
+                continue;
+            }
+            printf("Headers sent successfully\n");
+            //send file content
+            ssize_t file_bytes_written = write(client_fd, file_buffer, file_stat.st_size);
+            if(file_bytes_written < 0 || file_bytes_written < (ssize_t)file_stat.st_size){
+                perror("File content write failure");
+                free(file_buffer);
+                close(client_fd);
+                continue;
+            }
+            printf("File content sent successfully\n");
+            free(file_buffer);
             close(client_fd);
         }
-
-     
 
     }
     return 0;

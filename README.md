@@ -210,7 +210,12 @@ http-server/
 ├── src/
 │   ├── phase1_echoserver.c       # Phase 1: Echo server (COMPLETE)
 │   ├── phase2_httpserver.c       # Phase 2: HTTP basics (COMPLETE)
-│   └── phase3_staticserver.c     # Phase 3: Static files (TODO)
+│   ├── phase3_staticserver.c     # Phase 3: Static files (COMPLETE)
+│   └── phase4_errorhandling.c    # Phase 4: Error handling (TODO)
+├── public/                        # Static files to serve
+│   ├── index.html
+│   ├── style.css
+│   └── staticFile.js
 ├── build/                         # Compiled binaries
 └── docs/                          # Additional documentation
 ```
@@ -251,8 +256,9 @@ http-server/
 
 - [x] **Phase 1 Complete**: Echo server working with proper socket programming
 - [x] **Phase 2 Complete**: HTTP server with hardcoded HTML response
+- [x] **Phase 3 Complete**: Static file server serving real files from disk
 - [x] Can view in a real web browser
-- [ ] Can serve a static website with HTML, CSS, JS, images
+- [x] Can serve a static website with HTML, CSS, JS
 - [ ] Handles 100+ concurrent connections
 - [ ] Properly implements HTTP/1.1 core features
 - [ ] No memory leaks (valgrind clean)
@@ -268,20 +274,26 @@ make
 # Build a specific phase
 make phase1
 make phase2
+make phase3
 
-# Run the latest phase (currently Phase 2)
+# Run the latest phase (currently Phase 3)
 make run
 
 # Run a specific phase
 make run-phase1    # Echo server
 make run-phase2    # HTTP server
+make run-phase3    # Static file server
 
 # Test Phase 1 (Echo Server)
 echo "Hello, World!" | nc localhost 8080
 
 # Test Phase 2 (HTTP Server)
 curl http://localhost:8080
-# OR open http://localhost:8080 in your browser
+
+# Test Phase 3 (Static File Server)
+# Open http://localhost:8080 in your browser
+# Try http://localhost:8080/index.html
+# Try http://localhost:8080/style.css
 ```
 
 ## Development Log
@@ -350,6 +362,45 @@ curl http://localhost:8080
 
 ---
 
-**Current Phase**: Phase 3 - Static File Server  
+### Phase 3: Static File Server - ✅ COMPLETE (Jan 5, 2026)
+
+**What was built:**
+
+- File system operations (stat, open, read, close)
+- Dynamic file path construction (./public + request path)
+- File existence checking with stat()
+- Memory allocation with malloc() for file contents
+- MIME type detection based on file extensions
+- Support for HTML, CSS, JavaScript, images, and text files
+- Directory index handling (/ → index.html)
+- 404 Not Found responses for missing files
+- Two-phase response (headers + file contents)
+
+**Key learnings:**
+
+- File I/O operations (open, read, close)
+- stat() function and struct stat for file metadata
+- Dynamic memory allocation with malloc() and free()
+- MIME type mapping (.html → text/html, .css → text/css, etc.)
+- strrchr() for finding file extensions
+- Difference between stack and heap allocation
+- TCP stream guarantees order across multiple writes
+- Directory vs file handling
+- Memory leak prevention (always free() allocated buffers)
+
+**Testing:**
+
+- ✅ Tested with web browser serving complete website
+- ✅ HTML, CSS, and JavaScript all load correctly
+- ✅ Proper MIME types detected and sent
+- ✅ Directory index (/) serves index.html
+- ✅ 404 responses for missing files
+- ✅ No compiler warnings
+
+**Next Steps:** Phase 4 - Enhanced Error Handling
+
+---
+
+**Current Phase**: Phase 4 - HTTP Status Codes & Error Handling  
 **Status**: Not Started  
-**Next Milestone**: Serve actual files from disk instead of hardcoded HTML
+**Next Milestone**: Implement proper HTTP error codes (400, 404, 500) with custom error pages
