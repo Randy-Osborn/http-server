@@ -1,0 +1,77 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+}
+
+h1 {
+  color: white;
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.3em;
+  margin-bottom: 30px;
+  font-weight: normal;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card h3 {
+  color: #667eea;
+  margin-bottom: 15px;
+}
+
+.card p {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.card ul {
+  list-style-position: inside;
+  color: #555;
+  line-height: 2;
+}
+
+.card code {
+  background: #f4f4f4;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #764ba2;
+  font-family: "Courier New", monospace;
+}
+
+#js-target {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  border-left: 4px solid #4caf50;
+}
+
+.success {
+  color: #4caf50;
+  font-weight: bold;
+}
