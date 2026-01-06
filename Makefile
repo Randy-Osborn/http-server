@@ -7,9 +7,10 @@ BUILD_DIR = build
 PHASE1 = $(BUILD_DIR)/phase1_echoserver
 PHASE2 = $(BUILD_DIR)/phase2_httpserver
 PHASE3 = $(BUILD_DIR)/phase3_staticserver
+PHASE4 = $(BUILD_DIR)/phase4_enhancederrorhandling
 
 # Default target - build all phases
-all: $(BUILD_DIR) $(PHASE1) $(PHASE2) $(PHASE3)
+all: $(BUILD_DIR) $(PHASE1) $(PHASE2) $(PHASE3) $(PHASE4)
 
 # Create build directory
 $(BUILD_DIR):
@@ -27,6 +28,10 @@ $(PHASE2): $(SRC_DIR)/phase2_httpserver.c
 $(PHASE3): $(SRC_DIR)/phase3_staticserver.c
 	$(CC) $(CFLAGS) -o $(PHASE3) $(SRC_DIR)/phase3_staticserver.c
 
+# Build Phase 4: Enhanced Error Handling
+$(PHASE4): $(SRC_DIR)/phase4_enhancederrorhandling.c
+	$(CC) $(CFLAGS) -o $(PHASE4) $(SRC_DIR)/phase4_enhancederrorhandling.c
+
 # Individual phase targets
 phase1: $(BUILD_DIR) $(PHASE1)
 
@@ -34,9 +39,11 @@ phase2: $(BUILD_DIR) $(PHASE2)
 
 phase3: $(BUILD_DIR) $(PHASE3)
 
-# Run the latest phase (Phase 3)
-run: $(PHASE3)
-	./$(PHASE3)
+phase4: $(BUILD_DIR) $(PHASE4)
+
+# Run the latest phase (Phase 4)
+run: $(PHASE4)
+	./$(PHASE4)
 
 # Run specific phases
 run-phase1: $(PHASE1)
@@ -48,9 +55,12 @@ run-phase2: $(PHASE2)
 run-phase3: $(PHASE3)
 	./$(PHASE3)
 
+run-phase4: $(PHASE4)
+	./$(PHASE4)
+
 # Clean build artifacts
 clean:
 	rm -rf $(BUILD_DIR)
 
 # Phony targets
-.PHONY: all clean run phase1 phase2 phase3 run-phase1 run-phase2 run-phase3
+.PHONY: all clean run phase1 phase2 phase3 phase4 run-phase1 run-phase2 run-phase3 run-phase4

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>400 - Bad Request</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 20px;
+      }
+      .error-container {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 50px;
+        border-radius: 15px;
+        text-align: center;
+        max-width: 600px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+      h1 {
+        font-size: 8em;
+        margin: 0;
+        color: white;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+      }
+      h2 {
+        font-size: 2em;
+        color: white;
+        margin: 20px 0;
+      }
+      p {
+        font-size: 1.2em;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.6;
+        margin: 20px 0;
+      }
+      .details {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-container">
+      <h1>400</h1>
+      <h2>Bad Request</h2>
+      <p>Your browser sent a request that this server could not understand.</p>
+      <div class="details">
+        <p><strong>Common causes:</strong></p>
+        <p>
+          • Malformed HTTP request syntax<br />
+          • Invalid request method<br />
+          • Unsupported HTTP version
+        </p>
+      </div>
+      <p>Please check your request and try again.</p>
+    </div>
+  </body>
+</html>

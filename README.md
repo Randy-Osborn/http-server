@@ -205,19 +205,23 @@ By the end of this project, you will understand:
 
 ```
 http-server/
-├── README.md                      # This file
-├── Makefile                       # Build automation
+├── README.md                              # This file
+├── Makefile                               # Build automation
 ├── src/
-│   ├── phase1_echoserver.c       # Phase 1: Echo server (COMPLETE)
-│   ├── phase2_httpserver.c       # Phase 2: HTTP basics (COMPLETE)
-│   ├── phase3_staticserver.c     # Phase 3: Static files (COMPLETE)
-│   └── phase4_errorhandling.c    # Phase 4: Error handling (TODO)
-├── public/                        # Static files to serve
+│   ├── phase1_echoserver.c               # Phase 1: Echo server (COMPLETE)
+│   ├── phase2_httpserver.c               # Phase 2: HTTP basics (COMPLETE)
+│   ├── phase3_staticserver.c             # Phase 3: Static files (COMPLETE)
+│   └── phase4_enhancederrorhandling.c    # Phase 4: Error handling (COMPLETE)
+├── public/                                # Static files to serve
 │   ├── index.html
 │   ├── style.css
 │   └── staticFile.js
-├── build/                         # Compiled binaries
-└── docs/                          # Additional documentation
+├── errors/                                # Error pages (not publicly accessible)
+│   ├── 400.html
+│   ├── 404.html
+│   └── 500.html
+├── build/                                 # Compiled binaries
+└── docs/                                  # Additional documentation
 ```
 
 ## Resources
@@ -257,12 +261,13 @@ http-server/
 - [x] **Phase 1 Complete**: Echo server working with proper socket programming
 - [x] **Phase 2 Complete**: HTTP server with hardcoded HTML response
 - [x] **Phase 3 Complete**: Static file server serving real files from disk
+- [x] **Phase 4 Complete**: Professional error handling with custom error pages
 - [x] Can view in a real web browser
 - [x] Can serve a static website with HTML, CSS, JS
+- [x] Graceful error handling with custom error pages
 - [ ] Handles 100+ concurrent connections
 - [ ] Properly implements HTTP/1.1 core features
 - [ ] No memory leaks (valgrind clean)
-- [ ] Graceful error handling
 - [ ] Passes basic HTTP compliance tests
 
 ## Getting Started
@@ -275,14 +280,16 @@ make
 make phase1
 make phase2
 make phase3
+make phase4
 
-# Run the latest phase (currently Phase 3)
+# Run the latest phase (currently Phase 4)
 make run
 
 # Run a specific phase
 make run-phase1    # Echo server
 make run-phase2    # HTTP server
 make run-phase3    # Static file server
+make run-phase4    # Error handling
 
 # Test Phase 1 (Echo Server)
 echo "Hello, World!" | nc localhost 8080
@@ -401,6 +408,51 @@ curl http://localhost:8080
 
 ---
 
-**Current Phase**: Phase 4 - HTTP Status Codes & Error Handling  
+### Phase 4: Enhanced Error Handling - ✅ COMPLETE (Jan 6, 2026)
+
+**What was built:**
+
+- Custom HTML error pages (400.html, 404.html, 500.html)
+- Helper function send_error_response() that reads error HTML files
+- HTTP request validation (method, version, parsing)
+- 400 Bad Request for invalid methods (only GET/POST/HEAD allowed)
+- 400 Bad Request for invalid HTTP versions (only HTTP/1.0 and HTTP/1.1)
+- 400 Bad Request for malformed requests
+- Enhanced 404 Not Found with styled custom page
+- 500 Internal Server Error for file operation failures (malloc, open, read)
+- Path traversal security check (prevents ".." in paths)
+- Error pages stored outside public/ directory (not directly accessible)
+- Timestamp logging for all connections
+- Fallback error responses if error pages are missing
+
+**Key learnings:**
+
+- Difference between 400 (client error), 404 (not found), and 500 (server error)
+- HTTP request validation and security
+- Path traversal attacks and prevention with strstr()
+- Proper error response structure (status line + headers + HTML body)
+- File-based error pages vs hardcoded error messages
+- Security principle: error pages shouldn't be publicly accessible
+- Error handling for malloc(), open(), read() failures
+- Importance of validating HTTP method and version
+- Using stat() to check file existence before opening
+- Logging with timestamps for debugging
+
+**Testing:**
+
+- ✅ 404 errors show custom blue/purple styled page
+- ✅ 400 errors for invalid HTTP methods (DELETE, PUT, etc.)
+- ✅ 400 errors for invalid HTTP versions
+- ✅ 400 errors for malformed requests
+- ✅ Path traversal attempts blocked (returns 400)
+- ✅ Error pages not directly accessible at /errors/\*.html
+- ✅ Normal file serving still works (200 OK)
+- ✅ Proper status codes sent for each error type
+
+**Next Steps:** Phase 5 - Enhanced HTTP Features
+
+---
+
+**Current Phase**: Phase 5 - Enhanced HTTP Features  
 **Status**: Not Started  
-**Next Milestone**: Implement proper HTTP error codes (400, 404, 500) with custom error pages
+**Next Milestone**: Request header parsing, additional response headers, Keep-Alive support
