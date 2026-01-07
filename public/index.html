@@ -3,27 +3,76 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Phase 3 - Static File Server</title>
+    <title>Phase 4 - HTTP Server with Enhanced Error Handling</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
-      <h1>The Static File Server Works!</h1>
-      <h2>Serving Real Files from Disk</h2>
+      <h1>HTTP Server - Phase 4</h1>
+      <h2>Enhanced Error Handling & Static File Serving</h2>
 
       <div class="card">
-        <h3>This is a real HTML file!</h3>
-        <p>The server is reading this from <code>public/index.html</code></p>
+        <h3>Welcome to the Enhanced HTTP Server!</h3>
+        <p>
+          This server demonstrates advanced error handling with custom error
+          pages.
+        </p>
+        <p>Currently serving from <code>public/index.html</code></p>
       </div>
 
       <div class="card">
-        <h3>✅ Features Working:</h3>
+        <h3>Phase 4 Features:</h3>
         <ul>
-          <li>HTML file serving</li>
-          <li>CSS file serving (check the styling!)</li>
-          <li>JavaScript file serving (check the console)</li>
-          <li>MIME type detection</li>
+          <li>Custom HTML error pages (400, 404, 500)</li>
+          <li>Comprehensive request logging with timestamps</li>
+          <li>Static file serving (HTML, CSS, JS, images)</li>
+          <li>Proper MIME type detection</li>
+          <li>Graceful error handling for malformed requests</li>
+          <li>File not found handling with custom 404 pages</li>
         </ul>
+      </div>
+
+      <div class="card">
+        <h3>Error Handling Testing:</h3>
+
+        <h4>Browser Testing (404 Only):</h4>
+        <p>
+          Browsers automatically sanitize URLs, so you can only test 404 errors:
+        </p>
+        <div class="button-group">
+          <button onclick="testError404()" class="test-button">
+            Test 404 Not Found
+          </button>
+        </div>
+
+        <h4 style="margin-top: 25px">💻 Terminal Testing (All Error Types):</h4>
+        <p>Use these commands to test 400 Bad Request errors:</p>
+        <ul>
+          <li>
+            <strong>Path traversal:</strong>
+            <code>curl "http://localhost:8080/../etc/passwd"</code>
+          </li>
+          <li>
+            <strong>Invalid method:</strong>
+            <code
+              >echo -e "INVALID /index.html HTTP/1.1\r\n\r\n" | nc localhost
+              8080</code
+            >
+          </li>
+          <li>
+            <strong>Malformed request:</strong>
+            <code>echo -e "GET\r\n\r\n" | nc localhost 8080</code>
+          </li>
+        </ul>
+        <p>
+          <small
+            ><em>
+              Note: Browsers block malformed requests for security. The server's
+              400 error handling protects against bad requests from scripts and
+              tools.</em
+            ></small
+          >
+        </p>
       </div>
 
       <div id="js-target"></div>
