@@ -154,8 +154,10 @@ By the end of this project, you will understand:
 - Event loop architecture
 - State machines for connection handling
 - The C10K problem and solutions
+- Keep-Alive connection support (persistent connections)
+- Connection timeout handling
 
-**Deliverable**: A single-threaded event-driven server using epoll
+**Deliverable**: A single-threaded event-driven server using epoll with Keep-Alive support
 
 ---
 
@@ -262,11 +264,13 @@ http-server/
 - [x] **Phase 2 Complete**: HTTP server with hardcoded HTML response
 - [x] **Phase 3 Complete**: Static file server serving real files from disk
 - [x] **Phase 4 Complete**: Professional error handling with custom error pages
+- [x] **Phase 5 Complete**: Enhanced HTTP features (headers, URL decoding, query strings, HEAD method)
 - [x] Can view in a real web browser
 - [x] Can serve a static website with HTML, CSS, JS
 - [x] Graceful error handling with custom error pages
+- [x] Properly implements HTTP/1.1 core features
 - [ ] Handles 100+ concurrent connections
-- [ ] Properly implements HTTP/1.1 core features
+- [ ] Keep-Alive connection support
 - [ ] No memory leaks (valgrind clean)
 - [ ] Passes basic HTTP compliance tests
 
@@ -281,8 +285,9 @@ make phase1
 make phase2
 make phase3
 make phase4
+make phase5
 
-# Run the latest phase (currently Phase 4)
+# Run the latest phase (currently Phase 5)
 make run
 
 # Run a specific phase
@@ -290,6 +295,7 @@ make run-phase1    # Echo server
 make run-phase2    # HTTP server
 make run-phase3    # Static file server
 make run-phase4    # Error handling
+make run-phase5    # Enhanced HTTP features
 
 # Test Phase 1 (Echo Server)
 echo "Hello, World!" | nc localhost 8080
@@ -453,6 +459,49 @@ curl http://localhost:8080
 
 ---
 
-**Current Phase**: Phase 5 - Enhanced HTTP Features  
+### Phase 5: Enhanced HTTP Features - ✅ COMPLETE (Jan 17, 2026)
+
+**What was built:**
+
+- HTTP request header parsing (up to 32 headers)
+- HttpRequest and HttpHeader data structures
+- Enhanced response headers (Date, Server)
+- RFC 1123 formatted Date header with GMT time
+- Server identification header (MyHTTPServer/1.0)
+- HEAD method implementation (headers only, no body)
+- URL decoding for percent-encoded characters (%20 → space, etc.)
+- Query string parsing (splits at ?, parses key=value pairs)
+- QueryString and QueryParam data structures
+- Support for multiple query parameters separated by &
+
+**Key learnings:**
+
+- HTTP header parsing with strchr() and strstr()
+- Two-pointer technique for in-place string modification (URL decoding)
+- Converting hex strings to ASCII characters using strtol()
+- Using strtok_r() for tokenizing query strings
+- Difference between gmtime() (UTC) and localtime() for HTTP Date header
+- HEAD method: same as GET but without response body
+- Query string format: /path?key1=value1&key2=value2
+- POSIX function requirements (\_POSIX_C_SOURCE definition)
+- Pointer arithmetic for calculating substring lengths
+- In-place string manipulation to avoid memory allocation
+
+**Testing:**
+
+- ✅ Header parsing: 10-12 headers parsed from browser requests
+- ✅ Date header: "Sat, 17 Jan 2026 19:20:52 GMT" (RFC 1123 format)
+- ✅ Server header: "MyHTTPServer/1.0" sent in all responses
+- ✅ HEAD method: curl -I shows headers only, no body sent
+- ✅ URL decoding: /test%20file.html → /test file.html
+- ✅ Query strings: /?name=Randy&page=5&sort=date parsed 3 parameters correctly
+- ✅ All existing functionality (file serving, error pages) still works
+- ✅ No compiler warnings with -Wall -Wextra
+
+**Next Steps:** Phase 6 - Concurrency with Forking Model
+
+---
+
+**Current Phase**: Phase 6 - Concurrency (Forking Model)  
 **Status**: Not Started  
-**Next Milestone**: Request header parsing, additional response headers, Keep-Alive support
+**Next Milestone**: Handle multiple clients simultaneously using fork()
